@@ -588,17 +588,17 @@ lệnh/HTTP API. Ảnh chụp minh chứng cho báo cáo do sinh viên tự bổ
 |---|---|
 | Source code, cấu hình, README, `.gitignore`, `.env.example` | Đã tạo |
 | TypeScript check và production build | Đã chạy thành công |
-| Pytest backend (SQLite tạm) | 11 test đã chạy thành công trên Python 3.12 |
+| Pytest backend (SQLite tạm) | 12 test đã chạy thành công trên Python 3.12 |
 | Cấu hình Compose cho cả ba giai đoạn | `docker compose config --quiet` thành công |
 | MySQL thật | `SELECT 1` trả `1`; volume hiện có được giữ nguyên |
 | CRM/Nginx | `/`, `/health`, `/api/openapi.json` trả HTTP 200; security headers đã thấy |
-| Đăng nhập Admin | Chưa đạt: tài khoản theo email cấu hình có role Admin/active nhưng login trả HTTP 401; chưa đổi mật khẩu |
+| Đăng nhập Admin | Đã đặt lại qua luồng Mailpit; API login trả role `admin`, `/api/auth/me` và dashboard API đọc được |
 | phpMyAdmin | Trang trả HTTP 200; cấu hình trỏ đúng service `db`, chưa đăng nhập giao diện |
 | Prometheus/Grafana | 5/5 targets `UP`; dashboard `crm-overview` có 9 panel; CPU rule đã nạp (đang inactive); synthetic email notification đã đến Mailpit |
 | Loki/Promtail | Labels backend/db/frontend/nginx có log; 3 truy vấn LogQL trên đã trả log |
 | Hardening | Backend UID 10001, root filesystem read-only, `no-new-privileges`; DB không publish port; admin ports bind localhost |
 | Báo cáo tối thiểu 10 trang | Sinh viên tự hoàn thiện, xuất PDF và xác minh số trang |
-| Ba commit theo yêu cầu | Đã tạo cục bộ theo thứ tự app/Nginx, Prometheus/Grafana, Loki/Promtail + docs; chưa cấu hình remote để push |
+| GitHub | Các commit đã được push lên nhánh `main` của `dungzxjee/hoangtuandung`; kiểm tra `git status` không có thay đổi cục bộ |
 
 ## Báo cáo
 

@@ -69,9 +69,8 @@ thông qua Nginx. MySQL lưu dữ liệu bền vững bằng named volume. Prome
 scrape các exporter và endpoint instrumented; Grafana cung cấp dashboard và
 Explore. Loki lưu log trong thời hạn demo.
 
-Chưa đính kèm ảnh dashboard CRM đã đăng nhập: kiểm tra đăng nhập Admin bằng
-thông tin cấu hình hiện trả HTTP 401. Không dùng ảnh dựng hoặc dữ liệu giả để
-thay minh chứng CRM.
+Ảnh dashboard CRM đã đăng nhập do sinh viên tự bổ sung. Admin đã đăng nhập
+thành công qua API sau khi hoàn tất đặt lại mật khẩu bằng luồng Mailpit.
 
 <div style="page-break-after: always;"></div>
 
@@ -283,13 +282,17 @@ SQLite không chứng minh exporter scrape hoặc Loki ingest thành công.
 
 **Kết quả kiểm thử triển khai ngày 23/10/2026:** Docker Engine 26.1.4,
 Docker Compose 2.27.1. Compose cấu hình hợp lệ; frontend TypeScript check và
-production build thành công; backend pytest có 11 test pass trên Python 3.12.
+production build thành công; backend pytest có 12 test pass trên Python 3.12.
 Stack chạy được; MySQL `SELECT 1` trả `1`; website, `/health` và OpenAPI qua
 Nginx trả HTTP 200. Năm Prometheus target ở trạng thái `UP`; Grafana health
-`ok`; Loki trả log cho các selector backend/nginx/db. Kiểm tra login bằng
-thông tin cấu hình trả HTTP 401 dù tài khoản khớp email vẫn đang active; chưa
-đặt lại mật khẩu hoặc thay đổi dữ liệu tài khoản. Do đó luồng CRUD qua giao
-diện sau đăng nhập chưa được nghiệm thu.
+`ok`; Loki trả log cho các selector backend/nginx/db. Sau khi chủ tài khoản
+cho phép, mật khẩu Admin được đặt lại qua token một lần gửi vào Mailpit để
+đồng bộ với `ADMIN_PASSWORD` trong `.env`. API login sau đó trả role `admin`,
+`/api/auth/me` xác thực được tài khoản và dashboard API trả dữ liệu. Token
+bình thường có thời hạn 60 phút; khi gửi `remember_me=true`, thời hạn kiểm
+tra trong JWT là 30 ngày. GET các endpoint `customers`, `leads`,
+`interactions`, `tasks`, `appointments`, `users` trả HTTP 200 dưới token Admin;
+chỉ kiểm tra đọc, không tạo/sửa/xóa dữ liệu runtime. Không đưa mật khẩu vào báo cáo.
 
 Kiểm tra runtime hardening: backend chạy UID `10001`, root filesystem
 read-only, bật `no-new-privileges`; MySQL không publish port host; cổng Nginx,
@@ -297,8 +300,8 @@ Grafana và phpMyAdmin chỉ bind `127.0.0.1`. Nginx hiện chạy HTTP cục b�
 cấu hình HTTPS; security headers đã được xác nhận trên response.
 
 Kết quả lệnh test và build được ghi ở trên; ảnh chụp terminal chưa được lưu.
-Đăng nhập Admin vẫn là lỗi nghiệm thu còn mở và không được khắc phục bằng cách
-ghi đè mật khẩu hiện lưu khi chưa có xác nhận của chủ tài khoản.
+Luồng đăng nhập và đọc dashboard đã được xác minh qua API; thao tác tạo/sửa/xóa
+bản ghi trực tiếp trên giao diện chưa được kiểm thử trong lần xác minh này.
 
 <div style="page-break-after: always;"></div>
 
@@ -327,11 +330,11 @@ requests theo workload đo thực.
 ## Trang 12 — Kết luận và phụ lục minh chứng
 
 Đồ án hiện có frontend, backend, MySQL, reverse proxy, dashboard metrics và
-pipeline log; kiểm thử backend/frontend và các màn hình Prometheus/Grafana
-được ghi nhận. Chưa thể kết luận nghiệm thu hoàn tất: đăng nhập Admin trả HTTP
-401; tên giảng viên hướng dẫn còn chờ bổ sung; remote GitHub chưa được cấu
-hình; báo cáo chưa xuất PDF để xác nhận đủ 10 trang. Không tự đặt mật khẩu,
-thông tin học vụ, remote hoặc kết quả kiểm thử thay cho người dùng.
+pipeline log; kiểm thử backend/frontend và runtime targets/log đã được ghi
+nhận. Đăng nhập Admin đã được khôi phục và xác minh qua API. Báo cáo vẫn cần
+sinh viên tự hoàn thiện ảnh, bổ sung tên giảng viên, xuất PDF và xác minh đạt
+ít nhất 10 trang; thao tác CRUD trên giao diện chưa được kiểm tra trong lượt
+này.
 
 ### Phụ lục lệnh và minh chứng
 
@@ -344,15 +347,16 @@ git --no-pager log -3 --oneline
 
 | Minh chứng | Trạng thái |
 |---|---|
-| CRM dashboard và CRUD customer | Chưa có; đăng nhập Admin cần được khắc phục |
+| CRM dashboard và CRUD customer | API login/dashboard đã xác minh; ảnh và thao tác CRUD UI do sinh viên tự bổ sung |
 | MySQL tables trong phpMyAdmin | Chưa có ảnh; MySQL `SELECT 1` đã được xác nhận |
 | Nginx headers/healthcheck | Health/header đã được kiểm tra; chưa lưu ảnh terminal |
 | Prometheus targets UP | Sinh viên tự bổ sung ảnh |
 | Dashboard metrics có dữ liệu | Sinh viên tự bổ sung ảnh |
 | LogQL và log thật trong Explore | Sinh viên tự bổ sung ảnh |
 | Prometheus CPU rule đã nạp | Sinh viên tự bổ sung ảnh |
-| Lịch sử ba commit | Ba commit cục bộ theo thứ tự app/Nginx, monitoring, logging/docs; chưa có remote để push |
+| Lịch sử commit | Đã push các commit lên repository GitHub; ảnh chụp lịch sử do sinh viên tự bổ sung |
 
-**Kết luận:** phần monitoring/logging đã được kiểm tra thực tế. Sinh viên tự
-hoàn thiện báo cáo, bổ sung ảnh minh chứng, tên giảng viên hướng dẫn, xử lý
-hoặc xác nhận chấp nhận giới hạn đăng nhập, xuất tài liệu và kiểm tra số trang.
+**Kết luận:** các phần CRM authentication qua API, monitoring và logging đã
+được kiểm tra. Sinh viên tự hoàn thiện báo cáo, bổ sung ảnh minh chứng và tên
+giảng viên hướng dẫn, kiểm thử CRUD trên giao diện, xuất tài liệu và xác nhận
+số trang cuối cùng.

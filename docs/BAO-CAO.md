@@ -208,15 +208,15 @@ Dashboard chỉ có dữ liệu sau khi scrape chạy; tạo request thật đ�
 Trên Windows, chỉ số container phụ thuộc Docker Desktop Linux VM và quyền đọc
 mount cAdvisor.
 
-Ảnh Targets và dashboard ở dưới được chụp trực tiếp từ giao diện đang chạy
-ngày 23/10/2026. Không điền số đo CPU/RAM ngoài dữ liệu quan sát được.
+Không điền số đo CPU/RAM ngoài dữ liệu quan sát được. Phần ảnh minh chứng của
+báo cáo do sinh viên tự thực hiện.
 
 Kết quả kiểm tra cục bộ ngày 23/10/2026: cả năm job `prometheus`, `fastapi`,
 `nginx`, `mysql`, `containers` ở trạng thái `UP`; Prometheus trả 5 series cho
 `up`, có dữ liệu cho `http_requests_total`, `mysql_up=1`,
 `nginx_up=1` và `container_memory_working_set_bytes`. Grafana API health báo
 database `ok`, đã provision datasource Prometheus/Loki và dashboard
-`crm-overview`; ảnh dashboard đang chạy được đính kèm bên dưới.
+`crm-overview`.
 
 Kiểm tra bổ sung ngày 23/10/2026: `promtool check rules` chấp nhận CPU alert;
 `amtool check-config` chấp nhận route/receiver. Sau khi áp dụng Compose, cả năm
@@ -228,10 +228,6 @@ nhận email `[FIRING:1] SyntheticNotificationTest (info)` tới Mailpit
 `admin@localhost`; đây chỉ xác nhận notification pipeline, không phải CPU
 alert đã firing. Alertmanager và Grafana health endpoints trả HTTP 200. Named
 volumes được giữ nguyên khi áp dụng Compose.
-
-![Prometheus Targets — năm job đều UP](images/prometheus-targets.png)
-
-![Dashboard Grafana với metrics thực](images/grafana-dashboard.png)
 
 <div style="page-break-after: always;"></div>
 
@@ -267,9 +263,7 @@ khi kiểm tra không có warning/error mới từ Loki/Promtail.
 Promtail đã hết hỗ trợ upstream trong năm 2026; vẫn dùng trong đồ án do yêu
 cầu cụ thể. Hướng sản xuất là đánh giá chuyển sang Grafana Alloy.
 
-![Grafana Explore — truy vấn LogQL trên datasource Loki](images/grafana-explore-loki-404.png)
-
-![Các dòng access log 404 thật trả về từ Loki](images/grafana-explore-results.png)
+Phần ảnh chụp Explore và log kết quả trong báo cáo do sinh viên tự bổ sung.
 
 <div style="page-break-after: always;"></div>
 
@@ -353,13 +347,12 @@ git --no-pager log -3 --oneline
 | CRM dashboard và CRUD customer | Chưa có; đăng nhập Admin cần được khắc phục |
 | MySQL tables trong phpMyAdmin | Chưa có ảnh; MySQL `SELECT 1` đã được xác nhận |
 | Nginx headers/healthcheck | Health/header đã được kiểm tra; chưa lưu ảnh terminal |
-| Prometheus targets UP | `docs/images/prometheus-targets.png` |
-| Dashboard metrics có dữ liệu | `docs/images/grafana-dashboard.png` |
-| LogQL và log thật trong Explore | `docs/images/grafana-explore-loki-404.png`, `docs/images/grafana-explore-results.png` |
-| Prometheus CPU rule đã nạp | `docs/images/prometheus-rules.png` |
+| Prometheus targets UP | Sinh viên tự bổ sung ảnh |
+| Dashboard metrics có dữ liệu | Sinh viên tự bổ sung ảnh |
+| LogQL và log thật trong Explore | Sinh viên tự bổ sung ảnh |
+| Prometheus CPU rule đã nạp | Sinh viên tự bổ sung ảnh |
 | Lịch sử ba commit | Ba commit cục bộ theo thứ tự app/Nginx, monitoring, logging/docs; chưa có remote để push |
 
-**Kết luận:** phần monitoring/logging có bằng chứng ảnh chụp thực tế. Báo cáo
-vẫn là bản thảo cho đến khi bổ sung tên giảng viên hướng dẫn, xử lý hoặc xác
-nhận chấp nhận giới hạn đăng nhập, cấu hình remote GitHub nếu cần nộp online,
-xuất tài liệu và kiểm tra số trang cuối cùng.
+**Kết luận:** phần monitoring/logging đã được kiểm tra thực tế. Sinh viên tự
+hoàn thiện báo cáo, bổ sung ảnh minh chứng, tên giảng viên hướng dẫn, xử lý
+hoặc xác nhận chấp nhận giới hạn đăng nhập, xuất tài liệu và kiểm tra số trang.

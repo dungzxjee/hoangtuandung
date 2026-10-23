@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     DB_PASSWORD: str
     JWT_SECRET: str = Field(min_length=32)
     JWT_EXPIRE_MINUTES: int = Field(default=60, gt=0, le=1440)
+    JWT_REMEMBER_EXPIRE_DAYS: int = Field(default=30, gt=0, le=90)
     ADMIN_EMAIL: str
     ADMIN_PASSWORD: str = Field(min_length=12, max_length=128)
     CORS_ORIGINS: str = ""

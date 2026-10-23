@@ -23,9 +23,14 @@ def verify_password(password: str, hashed: str) -> bool:
     return password_hash.verify(password, hashed)
 
 
-def create_access_token(user: User) -> str:
+def create_access_token(user: User, remember_me: bool = False) -> str:
     settings = get_settings()
-    expires = datetime.now(timezone.utc) + timedelta(minutes=settings.JWT_EXPIRE_MINUTES)
+    lifetime = (
+        timedelta(days=settings.JWT_REMEMBER_EXPIRE_DAYS)
+        if remember_me
+        else timedelta(minutes=settings.JWT_EXPIRE_MINUTES)
+    )
+    expires = datetime.now(timezone.utc) + lifetime
     return jwt.encode(
         {"sub": str(user.id), "role": user.role, "exp": expires},
         settings.JWT_SECRET,

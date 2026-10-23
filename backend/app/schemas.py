@@ -16,6 +16,7 @@ def validate_strong_password(password: str) -> str:
 class LoginInput(BaseModel):
     email: EmailStr
     password: str = Field(min_length=1, max_length=128)
+    remember_me: bool = False
 
 
 class UserCreate(BaseModel):

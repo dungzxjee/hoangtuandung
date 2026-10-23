@@ -3,6 +3,8 @@ import hashlib
 from datetime import datetime, timedelta, timezone
 from urllib.parse import parse_qs, urlparse
 
+import jwt
+
 os.environ.setdefault("DB_PASSWORD", "test")
 os.environ.setdefault("JWT_SECRET", "test-secret-key-that-is-at-least-32-bytes")
 os.environ.setdefault("ADMIN_EMAIL", "admin@test.example")
@@ -89,6 +91,32 @@ def test_health_and_authentication():
         )
         assert response.status_code == 200
         assert response.json()["user"]["role"] == "admin"
+
+
+def test_remember_me_uses_configured_longer_token_lifetime():
+    with TestClient(main.app) as client:
+        credentials = {
+            "email": "admin@test.example",
+            "password": "TestPassword-Only-For-Tests",
+        }
+        session_login = client.post("/api/auth/login", json=credentials)
+        remembered_login = client.post(
+            "/api/auth/login", json={**credentials, "remember_me": True}
+        )
+
+        assert session_login.status_code == 200
+        assert remembered_login.status_code == 200
+        secret = main.get_settings().JWT_SECRET
+        session_claims = jwt.decode(
+            session_login.json()["access_token"], secret, algorithms=["HS256"]
+        )
+        remembered_claims = jwt.decode(
+            remembered_login.json()["access_token"], secret, algorithms=["HS256"]
+        )
+        now = datetime.now(timezone.utc).timestamp()
+
+        assert 60 * 60 - 2 <= session_claims["exp"] - now <= 60 * 60
+        assert 30 * 24 * 60 * 60 - 2 <= remembered_claims["exp"] - now <= 30 * 24 * 60 * 60
 
 
 def test_customer_crud_and_dashboard():

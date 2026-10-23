@@ -147,6 +147,10 @@ export default function App() {
   }, [token]);
 
   useEffect(() => {
+    if (token && user && screen === "login") navigateTo("app", true);
+  }, [screen, token, user]);
+
+  useEffect(() => {
     if (!token || !user || screen !== "app") return;
     setError("");
     if (active === "dashboard") {
@@ -199,7 +203,11 @@ export default function App() {
     try {
       const result = await fetch("/api/auth/login", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: data.get("email"), password: data.get("password") }),
+        body: JSON.stringify({
+          email: data.get("email"),
+          password: data.get("password"),
+          remember_me: rememberMe,
+        }),
       });
       const body = await result.json();
       if (!result.ok) throw new Error(body.detail ?? "Đăng nhập thất bại");
@@ -381,7 +389,7 @@ export default function App() {
       {loginNotice && <div className="success" role="status">{loginNotice}</div>}
       <label>Email đăng nhập<input name="email" type="email" required autoComplete="username" /></label>
       <label>Mật khẩu<input name="password" type="password" required autoComplete="current-password" /></label>
-      <label className="login-remember"><input type="checkbox" checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)} />Ghi nhớ đăng nhập trên thiết bị này</label>
+      <label className="login-remember"><input type="checkbox" checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)} />Ghi nhớ đăng nhập trên thiết bị này (tối đa 30 ngày)</label>
       <button className="primary full" disabled={busy}>{busy ? "Đang đăng nhập..." : "Đăng nhập"}</button>
       <small>Tài khoản được quản trị viên cấp.</small>
     </form>

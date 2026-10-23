@@ -150,6 +150,11 @@ Dashboard có danh sách công việc quá hạn và lịch hẹn tới thời �
 `Nhắc lúc` cho lịch hẹn để lịch xuất hiện trong danh sách. API lưu thời gian
 nhắc theo UTC; biểu mẫu hiển thị giờ địa phương của trình duyệt.
 
+Ở form đăng nhập, chọn **Ghi nhớ đăng nhập trên thiết bị này** để lưu phiên
+trong `localStorage` và cấp access token tối đa 30 ngày. Nếu bỏ chọn, token
+được lưu trong `sessionStorage` và hết hạn sau 60 phút. Chỉ bật trên thiết bị
+cá nhân đáng tin cậy; đăng xuất sẽ xóa token khỏi trình duyệt.
+
 Việc tạo tài khoản quản trị chỉ chạy khi bảng `users` đang trống. Nếu dùng
 volume MySQL đã có dữ liệu, đổi `ADMIN_PASSWORD` trong `.env` không đặt lại
 mật khẩu đã lưu. Nếu đăng nhập trả 401, không xóa volume; hãy dùng mật khẩu
@@ -399,10 +404,8 @@ Promtail đã Ready và `promtail_dropped_entries_total` hiện bằng 0.
 - Nếu selector có log nhưng lọc chuỗi rỗng, xác nhận request tạo log mới và
   lọc bằng chuỗi thật trong dòng log. `|= "404"` phân biệt hoa thường và chỉ
   khớp khi đã có request 404.
-- Ảnh Explore thật của truy vấn 404 đã lưu tại
-  `docs/images/grafana-explore-loki-404.png` (datasource/query/time range) và
-  `docs/images/grafana-explore-results.png` (các dòng log kết quả). Nếu chụp
-  ảnh mới, chỉ chụp sau khi thấy log thật; không dùng dữ liệu dựng.
+- Tự chụp ảnh sau khi dòng log xuất hiện thật trong Explore; chụp cả datasource
+  **Loki**, truy vấn, time range và kết quả. Không dùng dữ liệu dựng.
 
 > Lưu ý vòng đời: Promtail đã hết giai đoạn hỗ trợ upstream trong năm 2026.
 > Promtail vẫn được giữ ở đây vì là yêu cầu đồ án; khi triển khai mới thực tế,
@@ -578,8 +581,8 @@ Nếu remote `origin` đã tồn tại, kiểm tra bằng `git remote -v` thay v
 ## Bảng nghiệm thu trạng thái hiện tại
 
 Kiểm tra runtime thực hiện ngày 23/10/2026 trên Docker Engine 26.1.4 và
-Docker Compose 2.27.1. Các trạng thái “đã xác minh” bên dưới là kết quả của lệnh/HTTP API; ảnh Targets, rule,
-dashboard và LogQL thật hiện được lưu trong `docs/images/`.
+Docker Compose 2.27.1. Các trạng thái “đã xác minh” bên dưới là kết quả của
+lệnh/HTTP API. Ảnh chụp minh chứng cho báo cáo do sinh viên tự bổ sung.
 
 | Tiêu chí | Trạng thái |
 |---|---|
@@ -594,12 +597,10 @@ dashboard và LogQL thật hiện được lưu trong `docs/images/`.
 | Prometheus/Grafana | 5/5 targets `UP`; dashboard `crm-overview` có 9 panel; CPU rule đã nạp (đang inactive); synthetic email notification đã đến Mailpit |
 | Loki/Promtail | Labels backend/db/frontend/nginx có log; 3 truy vấn LogQL trên đã trả log |
 | Hardening | Backend UID 10001, root filesystem read-only, `no-new-privileges`; DB không publish port; admin ports bind localhost |
-| Báo cáo tối thiểu 10 trang | Có 12 phần và ảnh monitoring/log thật; chưa xuất PDF để xác nhận số trang |
+| Báo cáo tối thiểu 10 trang | Sinh viên tự hoàn thiện, xuất PDF và xác minh số trang |
 | Ba commit theo yêu cầu | Đã tạo cục bộ theo thứ tự app/Nginx, Prometheus/Grafana, Loki/Promtail + docs; chưa cấu hình remote để push |
 
 ## Báo cáo
 
-Xem [docs/BAO-CAO.md](docs/BAO-CAO.md). Tài liệu có ảnh chụp thực tế cho
-Prometheus targets/rule, dashboard và LogQL; các phần còn thiếu (thông tin học
-vụ, nghiệm thu CRUD CRM, remote GitHub và số trang sau xuất PDF) được ghi rõ,
-không thay bằng dữ liệu minh họa.
+Xem [docs/BAO-CAO.md](docs/BAO-CAO.md) để tham khảo nội dung kỹ thuật. Phần báo
+cáo 10 trang và ảnh minh chứng do sinh viên tự hoàn thiện.

@@ -1,0 +1,21 @@
+groups:
+  - name: crm-container-capacity
+    interval: 15s
+    rules:
+      - alert: ContainerCpuUsageAbove90Percent
+        expr: |
+          100 * sum by (name) (
+            rate(container_cpu_usage_seconds_total{name!="",cpu="total"}[5m])
+          ) / scalar(machine_cpu_cores) > 90
+        for: 3m
+        labels:
+          severity: warning
+          category: capacity
+        annotations:
+          summary: "Container {{ $labels.name }} is using more than 90% of host CPU capacity"
+          description: >-
+            Container {{ $labels.name }} has used {{ printf "%.1f" $value }}%
+            of the Docker host's reported logical CPU capacity continuously
+            for at least 3 minutes. This percentage is normalized by
+            machine_cpu_cores and is not relative to a container CPU quota.
+          runbook_url: "http://localhost:9090/alerts"

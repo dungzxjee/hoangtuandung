@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: CRM dashboards
+    orgId: 1
+    folder: CRM
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards

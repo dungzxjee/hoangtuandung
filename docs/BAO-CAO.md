@@ -13,7 +13,7 @@
 - Lớp: **CNTT K23M**
 - Repository: **DTC245120073-CRM-Cham-Soc-Khach-Hang**
 - Công nghệ: React, TypeScript, FastAPI, SQLAlchemy, MySQL, Docker Compose
-- Năm học: **Cần sinh viên xác nhận**
+- Năm học: **2025–2026**
 - Giảng viên hướng dẫn: **Cần sinh viên bổ sung**
 
 Đồ án xây dựng một ứng dụng web quản lý quan hệ khách hàng, giúp lưu trữ hồ sơ,
@@ -360,6 +360,6 @@ git --no-pager log -3 --oneline
 | Lịch sử ba commit | Ba commit cục bộ theo thứ tự app/Nginx, monitoring, logging/docs; chưa có remote để push |
 
 **Kết luận:** phần monitoring/logging có bằng chứng ảnh chụp thực tế. Báo cáo
-vẫn là bản thảo cho đến khi bổ sung thông tin học vụ, xử lý hoặc xác nhận chấp
-nhận giới hạn đăng nhập, cấu hình remote GitHub nếu cần nộp online, xuất tài
-liệu và kiểm tra số trang cuối cùng.
+vẫn là bản thảo cho đến khi bổ sung tên giảng viên hướng dẫn, xử lý hoặc xác
+nhận chấp nhận giới hạn đăng nhập, cấu hình remote GitHub nếu cần nộp online,
+xuất tài liệu và kiểm tra số trang cuối cùng.

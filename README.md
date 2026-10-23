@@ -40,7 +40,6 @@ CRM-Cham-Soc-Khach-Hang/
 |-- loki/config.yml          Lưu log demo 7 ngày
 |-- promtail/config.yml      Docker service discovery và nhãn log
 |-- tests/backend/           pytest API/integration tests với SQLite tạm
-|-- docs/BAO-CAO.md          Khung báo cáo tiếng Việt và vị trí minh chứng
 |-- docker-compose.yml       CRM, MySQL, Nginx và phpMyAdmin (profile admin)
 |-- docker-compose.monitoring.yml
 |-- docker-compose.logging.yml
@@ -597,10 +596,4 @@ lệnh/HTTP API. Ảnh chụp minh chứng cho báo cáo do sinh viên tự bổ
 | Prometheus/Grafana | 5/5 targets `UP`; dashboard `crm-overview` có 9 panel; CPU rule đã nạp (đang inactive); synthetic email notification đã đến Mailpit |
 | Loki/Promtail | Labels backend/db/frontend/nginx có log; 3 truy vấn LogQL trên đã trả log |
 | Hardening | Backend UID 10001, root filesystem read-only, `no-new-privileges`; DB không publish port; admin ports bind localhost |
-| Báo cáo tối thiểu 10 trang | Sinh viên tự hoàn thiện, xuất PDF và xác minh số trang |
 | GitHub | Các commit đã được push lên nhánh `main` của `dungzxjee/hoangtuandung`; kiểm tra `git status` không có thay đổi cục bộ |
-
-## Báo cáo
-
-Xem [docs/BAO-CAO.md](docs/BAO-CAO.md) để tham khảo nội dung kỹ thuật. Phần báo
-cáo 10 trang và ảnh minh chứng do sinh viên tự hoàn thiện.

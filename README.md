@@ -260,6 +260,20 @@ nhóm và gửi email khi alert phát sinh hoặc resolved đến Mailpit local.
    Alertmanager (đây chỉ là kiểm thử notification, không chứng minh CPU alert
    đã firing):
 
+Kiểm thử logic rule mà không tạo tải trên CRM/host:
+
+```powershell
+docker cp tests\prometheus\cpu-alert.test.yml crm-customer-care-prometheus-1:/tmp/cpu-alert.test.yml
+docker compose -f docker-compose.yml -f docker-compose.monitoring.yml exec -T prometheus promtool test rules /tmp/cpu-alert.test.yml
+```
+
+Test dùng metric CPU tổng hợp trong môi trường `promtool` cô lập: kiểm tra
+không firing trước khi đủ 3 phút, chuyển firing khi vượt 90% sau thời gian
+pending, và không firing ở mức dưới ngưỡng. Đây là kiểm thử đơn vị của rule,
+không phải CPU alert thật firing từ host. Để chứng minh firing thực tế cần tải
+CPU thật vượt khoảng 14.4/16 cores liên tục; không tự chạy tải này vì có thể
+làm máy và CRM chậm.
+
 ```powershell
 $now = [DateTime]::UtcNow
 $testAlert = @(@{
@@ -305,8 +319,10 @@ Kiểm tra thực tế ngày 23/10/2026: năm target (`prometheus`, `fastapi`,
 `nginx`, `mysql`, `containers`) đều `UP` và không có `lastError`. Rule
 `ContainerCpuUsageAbove90Percent` đã nạp, health `ok`, trạng thái `inactive`.
 Backend, Nginx và database không có CPU quota; `machine_cpu_cores=16`, nên
-ngưỡng được tính theo tổng năng lực CPU host. Không xác nhận CPU alert đã
-firing khi chưa có tải thực vượt ngưỡng.
+ngưỡng được tính theo tổng năng lực CPU host. `promtool check rules` và lệnh
+kiểm thử đơn vị phía trên đều thành công; test xác nhận ngưỡng/pending/firing
+với series tổng hợp. Tại lần kiểm tra, CPU cao nhất khoảng 0.105% tổng năng
+lực host và alert runtime không firing.
 
 ## Giai đoạn 3 — Loki và Promtail
 

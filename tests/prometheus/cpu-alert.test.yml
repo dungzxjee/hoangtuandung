@@ -1,0 +1,41 @@
+rule_files:
+  - /etc/prometheus/alerts.yml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'machine_cpu_cores{job="containers"}'
+        values: '16+0x10'
+      - series: 'container_cpu_usage_seconds_total{name="cpu-test",cpu="total"}'
+        values: '0+900x10'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: ContainerCpuUsageAbove90Percent
+        exp_alerts: []
+      - eval_time: 7m
+        alertname: ContainerCpuUsageAbove90Percent
+        exp_alerts: []
+      - eval_time: 8m
+        alertname: ContainerCpuUsageAbove90Percent
+        exp_alerts:
+          - exp_labels:
+              name: cpu-test
+              severity: warning
+              category: capacity
+            exp_annotations:
+              summary: "Container cpu-test is using more than 90% of host CPU capacity"
+              description: "Container cpu-test has used 93.8% of the Docker host's reported logical CPU capacity continuously for at least 3 minutes. This percentage is normalized by machine_cpu_cores and is not relative to a container CPU quota."
+              runbook_url: "http://localhost:9090/alerts"
+
+  - interval: 1m
+    input_series:
+      - series: 'machine_cpu_cores{job="containers"}'
+        values: '16+0x10'
+      - series: 'container_cpu_usage_seconds_total{name="cpu-test",cpu="total"}'
+        values: '0+600x10'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: ContainerCpuUsageAbove90Percent
+        exp_alerts: []

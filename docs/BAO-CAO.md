@@ -335,8 +335,8 @@ requests theo workload đo thực.
 Đồ án hiện có frontend, backend, MySQL, reverse proxy, dashboard metrics và
 pipeline log; kiểm thử backend/frontend và các màn hình Prometheus/Grafana
 được ghi nhận. Chưa thể kết luận nghiệm thu hoàn tất: đăng nhập Admin trả HTTP
-401; năm học/giảng viên hướng dẫn còn chờ thông tin; remote GitHub chưa được
-cấu hình; báo cáo chưa xuất PDF để xác nhận đủ 10 trang. Không tự đặt mật khẩu,
+401; tên giảng viên hướng dẫn còn chờ bổ sung; remote GitHub chưa được cấu
+hình; báo cáo chưa xuất PDF để xác nhận đủ 10 trang. Không tự đặt mật khẩu,
 thông tin học vụ, remote hoặc kết quả kiểm thử thay cho người dùng.
 
 ### Phụ lục lệnh và minh chứng
